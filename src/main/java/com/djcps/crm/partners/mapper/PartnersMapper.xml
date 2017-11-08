@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.djcps.crm.partners.dao.PartnersDao">
+    <resultMap id="partnersResultMap" type="com.djcps.crm.partners.model.Partners">
+        <!--OAID-->
+        <result property="id" column="foaid"/>
+        <!--UUID-->
+        <result property="pid" column="fid"/>
+        <!--公司名称-->
+        <result property="oname" column="fpartner"/>
+        <!--法人代表姓名-->
+        <result property="uname" column="fname"/>
+        <!--联系方式-->
+        <result property="uphone" column="ftel"/>
+        <!--省-->
+        <result property="oprovince" column="fprovince"/>
+        <!--市-->
+        <result property="ocity" column="fcity"/>
+        <!--开户银行-->
+        <result property="bank" column="fbank"/>
+        <!--银行卡号-->
+        <result property="bankcard" column="fbankcardid"/>
+        <!--开户人-->
+        <result property="accountholder" column="faccountholder"/>
+        <!--注册资本-->
+        <result property="registercapital" column="fregistercapital"/>
+        <!--年销售额-->
+        <result property="annualsales" column="fannualsales"/>
+        <!--传真-->
+        <result property="fax" column="ffax"/>
+        <!--网址-->
+        <result property="website" column="fwebsite"/>
+        <!--企业类型-->
+        <result property="enterprisetype" column="fenterprisetype"/>
+        <!--企业人数-->
+        <result property="enterprisenumber" column="fenterprisenumber"/>
+        <!--厂房面积-->
+        <result property="plantarea" column="fplantarea"/>
+        <!--厂房属性-->
+        <result property="planttype" column="fplanttype"/>
+        <!--生产线数量-->
+        <result property="linenumber" column="flinenumber"/>
+        <!--生产线门幅-->
+        <result property="linedoor" column="flinedoor"/>
+        <!--生产线品牌-->
+        <result property="linebrand" column="flinebrand"/>
+        <!--生产线的平均车速-->
+        <result property="linespeed" column="flines_avgpeed"/>
+        <!--开机时长-->
+        <result property="opentime" column="fopentime"/>
+        <!--生产班次-->
+        <result property="productionshift" column="fproductionshift"/>
+        <!--日均产能-->
+        <result property="avgcapacity" column="favgcapacity"/>
+        <!--日最大产能-->
+        <result property="maxcapacity" column="fmaxcapacity"/>
+        <!--产品数量-->
+        <result property="productquantity" column="fproductquantity"/>
+        <!--产量最大的三种产品-->
+        <result property="maxthree" column="fmaxthree"/>
+        <!--运输配送方式-->
+        <result property="transporttype" column="ftransporttype"/>
+        <!--车辆数量-->
+        <result property="carnumber" column="fcarnumber"/>
+        <!--总经理/厂长-->
+        <result property="managername" column="fgmname"/>
+        <!--年龄-->
+        <result property="age" column="fage"/>
+        <!--学历-->
+        <result property="educationbackground" column="feducation"/>
+        <!--研发技术人员数量-->
+        <result property="rdnumber" column="frdnumber"/>
+        <!--质量人员数量-->
+        <result property="fmassnumber" column="fmassnumber"/>
+        <!--销售人员数量-->
+        <result property="salesnumber" column="fsalesnumber"/>
+        <!--一线生产人员数量-->
+        <result property="onelinenumber" column="fonelinenumber"/>
+        <!--物流人员数量-->
+        <result property="logisticsnumber" column="flogisticsnumber"/>
+        <!--管理人员数量-->
+        <result property="managenumber" column="fmanagenumber"/>
+        <!--订单分发配置-->
+        <result property="configuration" column="fconfiguration"/>
+        <!--修改日期-->
+        <result property="updatetime" column="fupdatedate"/>
+        <!--状态-->
+        <result property="effect" column="feffect"/>
+        <!--合作商区域拆分键-->
+        <result property="ocode" column="fkeyarea"/>
+    </resultMap>
+    <resultMap id="partnersInitResultMap" type="com.djcps.crm.partners.model.PartnersInit">
+        <!--OAID-->
+        <result property="id" column="foaid"/>
+        <!--UUID-->
+        <result property="pid" column="fid"/>
+        <!--公司名称-->
+        <result property="oname" column="fpartner"/>
+        <!--法人代表姓名-->
+        <result property="uname" column="fname"/>
+        <!--联系方式-->
+        <result property="uphone" column="ftel"/>
+        <!--省-->
+        <result property="oprovince" column="fprovince"/>
+        <!--市-->
+        <result property="ocity" column="fcity"/>
+        <!--状态-->
+        <result property="effect" column="feffect"/>
+        <!--最近更新时间-->
+        <result property="updatetime" column="fupdatedate"/>
+        <!--合作商区域拆分键-->
+        <result property="ocode" column="fkeyarea"/>
+    </resultMap>
+    <!--
+    /**
+     * 查询合作商列表，带条件查询，带分页
+     * @param oname 合作商  省份
+     * @param oprovince 合作商  市
+     * @param ocity 合作商名字
+     * @param beginPage 起始条数
+     * @return
+     */
+    -->
+    <select id="findPartnersPage" resultMap="partnersInitResultMap">
+        SELECT foaid,fid,fpartner,fname,ftel,fprovince,fcity,fupdatedate,feffect,fkeyarea
+        FROM t_partner
+        <where>
+            <if test=" oname!=null and oname != ''">
+                AND fpartner LIKE concat('%',#{oname} ,'%')
+            </if>
+            <if test=" oprovince != null and oprovince != ''">
+                AND fprovince = #{oprovince}
+            </if>
+            <if test=" ocity != null and ocity != ''">
+                AND fcity = #{ocity}
+            </if>
+        </where>
+        ORDER BY fupdatedate DESC
+        LIMIT #{beginPage},#{pageSize}
+    </select>
+    <!--
+      /**
+     * 查询带条件的合作商Count
+     * @param oname        合作商名称
+     * @param oprovince     省
+     * @param ocity         市
+     * @return
+     */
+    -->
+    <select id="findPartnersCount" resultType="int">
+        SELECT COUNT(*) FROM t_partner
+        <where>
+            <if test=" oname!=null and oname != ''">
+                AND fpartner LIKE concat('%',#{oname} ,'%')
+            </if>
+            <if test=" oprovince != null and oprovince != ''">
+                AND fprovince = #{oprovince}
+            </if>
+            <if test=" ocity != null and ocity != ''">
+                AND fcity = #{ocity}
+            </if>
+        </where>
+    </select>
+    <!--查询所有已添加合作商的oaid-->
+    <select id="findPartners" resultMap="partnersResultMap">
+        SELECT foaid
+        FROM t_partner
+    </select>
+    <!--
+     /**
+     * 查询单个合作商信息
+     * @param fid 合作UUID
+     * @return
+     */
+    -->
+    <select id="findOnePartners" resultMap="partnersResultMap">
+      SELECT
+        foaid,
+        fid,
+        fpartner,
+        fname,
+        ftel,
+        fprovince,
+        fcity,
+        fbank,
+        fbankcardid,
+        faccountholder,
+        fregistercapital,
+        fannualsales,
+        ffax,
+        fwebsite,
+        fenterprisetype,
+        fenterprisenumber,
+        fplantarea,
+        fplanttype,
+        flinenumber,
+        flinedoor,
+        flinebrand,
+        flines_avgpeed,
+        fopentime,
+        fproductionshift,
+        favgcapacity,
+        fmaxcapacity,
+        fproductquantity,
+        fmaxthree,
+        ftransporttype,
+        fcarnumber,
+        fgmname,
+        fage,
+        feducation,
+        frdnumber,
+        fmassnumber,
+        fsalesnumber,
+        fonelinenumber,
+        flogisticsnumber,
+        fmanagenumber,
+        fconfiguration,
+        fkeyarea
+      FROM t_partner
+      WHERE fid = #{pid} AND fkeyarea = #{fkeyarea}
+    </select>
+    <!--
+     /**
+     * 添加合作商
+     * @param partners 合作商实体
+     * @return
+     */
+    -->
+    <insert id="addPartners">
+        INSERT INTO t_partner(
+        foaid,
+        fid,
+        fpartner,
+        fname,
+        ftel,
+        fprovince,
+        fcity,
+        fbank,
+        fbankcardid,
+        faccountholder,
+        fregistercapital,
+        fannualsales,
+        ffax,
+        fwebsite,
+        fenterprisetype,
+        fenterprisenumber,
+        fplantarea,
+        fplanttype,
+        flinenumber,
+        flinedoor,
+        flinebrand,
+        flines_avgpeed,
+        fopentime,
+        fproductionshift,
+        favgcapacity,
+        fmaxcapacity,
+        fproductquantity,
+        fmaxthree,
+        ftransporttype,
+        fcarnumber,
+        fgmname,
+        fage,
+        feducation,
+        frdnumber,
+        fmassnumber,
+        fsalesnumber,
+        fonelinenumber,
+        flogisticsnumber,
+        fmanagenumber,
+        fconfiguration,
+        fkeyarea
+        )
+        VALUES (
+        #{partners.id},
+        #{partners.pid},
+        #{partners.oname},
+        #{partners.uname},
+        #{partners.uphone},
+        #{partners.oprovince},
+        #{partners.ocity},
+        #{partners.bank},
+        #{partners.bankcard},
+        #{partners.accountholder},
+        #{partners.registercapital},
+        #{partners.annualsales},
+        #{partners.fax},
+        #{partners.website},
+        #{partners.enterprisetype},
+        #{partners.enterprisenumber},
+        #{partners.plantarea},
+        #{partners.planttype},
+        #{partners.linenumber},
+        #{partners.linedoor},
+        #{partners.linebrand},
+        #{partners.linespeed},
+        #{partners.opentime},
+        #{partners.productionshift},
+        #{partners.avgcapacity},
+        #{partners.maxcapacity},
+        #{partners.productquantity},
+        #{partners.maxthree},
+        #{partners.transporttype},
+        #{partners.carnumber},
+        #{partners.managername},
+        #{partners.age},
+        #{partners.educationbackground},
+        #{partners.rdnumber},
+        #{partners.fmassnumber},
+        #{partners.salesnumber},
+        #{partners.onelinenumber},
+        #{partners.logisticsnumber},
+        #{partners.managenumber},
+        #{partners.configuration},
+        #{partners.ocode}
+        )
+    </insert>
+    <!--
+     /**
+     * 修改合作商信息
+     * @param partners 合作商实体
+     * @return
+     */
+    -->
+    <update id="updatePartners">
+        UPDATE t_partner
+        SET
+        fpartner = #{partners.oname},
+        fname = #{partners.uname},
+        ftel = #{partners.uphone},
+        fprovince = #{partners.oprovince},
+        fcity = #{partners.ocity},
+        fbank = #{partners.bank},
+        fbankcardid = #{partners.bankcard},
+        faccountholder = #{partners.accountholder},
+        fregistercapital = #{partners.registercapital},
+        fannualsales = #{partners.annualsales},
+        ffax = #{partners.fax},
+        fwebsite = #{partners.website},
+        fenterprisetype = #{partners.enterprisetype},
+        fenterprisenumber = #{partners.enterprisenumber},
+        fplantarea = #{partners.plantarea},
+        fplanttype = #{partners.planttype},
+        flinenumber = #{partners.linenumber},
+        flinedoor = #{partners.linedoor},
+        flinebrand = #{partners.linebrand},
+        flines_avgpeed = #{partners.linespeed},
+        fopentime = #{partners.opentime},
+        fproductionshift = #{partners.productionshift},
+        favgcapacity = #{partners.avgcapacity},
+        fmaxcapacity = #{partners.maxcapacity},
+        fproductquantity = #{partners.productquantity},
+        fmaxthree = #{partners.maxthree},
+        ftransporttype = #{partners.transporttype},
+        fcarnumber = #{partners.carnumber},
+        fgmname = #{partners.managername},
+        fage = #{partners.age},
+        feducation = #{partners.educationbackground},
+        frdnumber = #{partners.rdnumber},
+        fmassnumber = #{partners.fmassnumber},
+        fsalesnumber = #{partners.salesnumber},
+        fonelinenumber = #{partners.onelinenumber},
+        flogisticsnumber = #{partners.logisticsnumber},
+        fmanagenumber = #{partners.managenumber},
+        fconfiguration = #{partners.configuration},
+        fupdatedate = NOW()
+        WHERE fid = #{partners.pid} AND fkeyarea = #{partners.ocode}
+    </update>
+    <!--修改合作方状态-->
+    <update id="upPartnerStatus">
+        UPDATE t_partner
+        SET feffect = #{crm},
+        fupdatedate = NOW()
+        WHERE foaid = #{companyID}
+    </update>
+    <!--查询合作方下拉框,通过城市获取-->
+    <select id="findOption" resultMap="partnersResultMap">
+        SELECT foaid,fid,fpartner,fname,fprovince,fcity,fkeyarea
+        FROM t_partner
+        WHERE fcity = #{city}
+    </select>
+
+    <!--产品管理用，start====================================================-->
+    <!--查询合作方下拉框，反差，不需要参数获取-->
+    <select id="findOptionByNull" resultMap="partnersResultMap">
+        SELECT foaid,fid,fpartner,fkeyarea
+        FROM t_partner
+    </select>
+    <!--获取合作商服务地址到合作商地址管理获取-->
+    <!--产品管理用，end=======================================================-->
+
+    <!--根据oaid查找合作方，查询订单配置状态-->
+    <select id="findPartnersById" resultMap="partnersResultMap">
+        SELECT fconfiguration
+        FROM t_partner
+        WHERE foaid = #{oid} AND fkeyarea = #{ocode}
+    </select>
+    <!--根据oaid批量获取合作方信息-->
+    <select id="findPartnersByIds" resultMap="partnersResultMap">
+        SELECT foaid,fpartner,fprovince,fcity,fkeyarea
+        FROM t_partner
+        WHERE foaid IN
+        <foreach collection="oaid" index="index" item="oaid" open="(" separator="," close=")">
+            #{oaid}
+        </foreach>
+    </select>
+
+    <!--合作方下的行政地址下拉框，start==================================-->
+    <!--获取合作方下的所有省份-->
+    <select id="findPartnersProvince" resultMap="partnersResultMap">
+        SELECT fprovince
+        FROM t_partner
+        GROUP BY fprovince
+    </select>
+    <!--根据合作方的省份查询下面的市区-->
+    <select id="findPartnersCity" resultMap="partnersResultMap">
+        SELECT fcity
+        FROM t_partner
+        WHERE fprovince = #{province}
+        GROUP BY fcity
+    </select>
+    <!--合作方下的行政地址下拉框，end==================================-->
+
+    <!--根据市区code，到合作方销售区域表中查出该市区下的所有合作方的id，拿着id到合作方表中查出对应合作方信息-->
+    <select id="findPartnersByCityName" resultMap="partnersResultMap">
+        SELECT DISTINCT tp.fpartner,tp.fkeyarea,tp.foaid,tp.fid
+        FROM t_partner tp,t_partner_salesarea ts
+        WHERE tp.foaid = ts.foaid AND ts.fcityname = #{cityName}
+    </select>
+</mapper>

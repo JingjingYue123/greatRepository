@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!-- 引入配置文件 -->
+	<context:property-placeholder location="classpath:config/properties/*.properties"/>
+
+	<!--用于全局配置-->
+	<bean id="paramsConfig" class="com.djcps.crm.commons.config.ParamsConfig">
+		<property name="loginTimeout" value="${p1.loginTimeout}"/>
+		<property name="CookieTimeout" value="${p1.CookieTimeout}"/>
+		<property name="BannerUrl" value="${p1.BannerUrl}"/>
+		<property name="FileSystemUrl" value="${p1.FileSystemUrl}"/>
+		<property name="SysAuthInterceptor" value="${p1.SysAuthInterceptor}"/>
+		<property name="SysAuthCrmInterceptor" value="${p1.SysAuthCrmInterceptor}"/>
+		<property name="RequestMappingContextRefreshedEvent" value="${p1.RequestMappingContextRefreshedEvent}"/>
+		<property name="InnerUserCookieName" value="${p1.InnerUserCookieName}"/>
+		<property name="InnerUserUrl" value="${p1.InnerUserUrl}"/>
+		<property name="InnerUserUnifiedLoginUrl" value="${p1.InnerUserUnifiedLoginUrl}"/>
+		<property name="CrmUrlRedisKey" value="${p1.CrmUrlRedisKey}"/>
+		<property name="orSys" value="${p1.orSys}" />
+        <property name="menuFatherId" value="${p1.menuFatherId}" />
+		<property name="OuterUserSys" value="${p1.OuterUserSys}" />
+		<property name="AddressSys" value="${p1.AddressSys}" />
+		<property name="OrderSys" value="${p1.orderSys}" />
+		<property name="PaymentSys" value="${p1.paymentSys}" />
+		<property name="IntegralSys" value="${p1.integralSys}" />
+		<property name="ProductUrl" value="${p1.ProductUrl}" />
+		<property name="NumberSys" value="${p1.numberSys}" />
+		<property name="PaybankSys" value="${p1.PayBankSys}"/>
+		<property name="integralProduct_Mall" value="${p1.integralProduct_Mall}" />
+		<property name="integralOrder_Mall" value="${p1.integralOrder_Mall}" />
+	</bean>
+
+</beans>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.djcps.crm.filter.sysurlistener.dao.RequestMappingDao">
+
+
+	<resultMap id="URL" type="com.djcps.crm.filter.sysurlistener.model.Furl">
+		<result column="fid" property="fid"/>
+		<result column="fname" property="fname"/>
+		<result column="furl" property="furl"/>
+		<result column="flogintype" property="flogintype"/>
+		<result column="feffect" property="feffect"/>
+		<result column="fcreatetime" property="fcreatetime"/>
+	</resultMap>
+
+	<sql id="allfield">
+		fid,fname,furl,flogintype,feffect,fcreatetime
+	</sql>
+
+	<select id="selectAllFurl" resultMap="URL" useCache="false">
+		select
+		<include refid="allfield"/>
+		from t_sys_url
+	</select>
+
+	<update id="deleteFurl" parameterType="list">
+		update t_sys_url set feffect = 0
+		<where>
+			fid In
+			<foreach collection="list" open="(" close=")" separator="," item="url">
+				#{url}
+			</foreach>
+		</where>
+	</update>
+
+	<insert id="insertFurl" parameterType="java.util.List">
+		INSERT INTO t_sys_url (
+		<include refid="allfield"/>
+		) VALUES
+		<foreach collection="list" open="" close="" separator="," item="InFurl">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				#{InFurl.fid},
+				#{InFurl.fname},
+				#{InFurl.furl},
+				#{InFurl.flogintype},
+				#{InFurl.feffect},
+				#{InFurl.fcreatetime}
+			</trim>
+		</foreach>
+	</insert>
+
+
+</mapper>

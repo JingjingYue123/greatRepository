@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.djcps.crm.partnersarea.dao.PartnersAreaDao">
+    <resultMap id="partnersAreaMap" type="com.djcps.crm.partnersarea.model.PartnersArea">
+        <!--区域表唯一-->
+        <result property="aid" column="fid"/>
+        <!--oaid-->
+        <result property="oaid" column="foaid"/>
+        <!--合作商id-->
+        <result property="pid" column="fpid"/>
+        <!--省份code-->
+        <result property="provinceCode" column="fprovincecode"/>
+        <!--省份名称-->
+        <result property="provinceName" column="fprovincename"/>
+        <!--市code-->
+        <result property="cityCode" column="fcitycode"/>
+        <!--市名称-->
+        <result property="cityName" column="fcityname"/>
+        <!--区域code-->
+        <result property="countyCode" column="fcountycode"/>
+        <!--区域名称-->
+        <result property="countyName" column="fcountyname"/>
+        <!--区域拆分键-->
+        <result property="keyarea" column="fkeyarea"/>
+    </resultMap>
+
+
+    <select id="findAllArea" resultMap="partnersAreaMap">
+      SELECT fid,foaid,fpid,fprovincecode,fprovincename,fcitycode,fcityname,fcountycode,fcountyname
+      FROM  t_partner_salesarea
+      WHERE fpid = #{pid} AND fkeyarea = #{keyArea}
+    </select>
+    <insert id="addPartnersArea">
+      INSERT
+      INTO
+      t_partner_salesarea(
+          fid,
+          foaid,
+          fpid,
+          fprovincecode,
+          fprovincename,
+          fcitycode,
+          fcityname,
+          fcountycode,
+          fcountyname,
+          fkeyarea
+      )
+      VALUES (
+        #{partnersArea.aid},
+        #{partnersArea.oaid},
+        #{partnersArea.pid},
+        #{partnersArea.provinceCode},
+        #{partnersArea.provinceName},
+        #{partnersArea.cityCode},
+        #{partnersArea.cityName},
+        #{partnersArea.countyCode},
+        #{partnersArea.countyName},
+        #{partnersArea.keyarea}
+      )
+    </insert>
+    <delete id="delPartnersArea">
+      DELETE
+      FROM t_partner_salesarea
+      WHERE fid = #{aid} AND fkeyarea = #{fkeyarea}
+    </delete>
+
+    <!--产品管理用，start====================================================-->
+    <!--省份下拉框,反查用，根据合作商获取合作商省份-->
+    <select id="findOptionByPartner" resultMap="partnersAreaMap">
+        SELECT fpid,foaid,fprovincecode,fprovincename,fkeyarea
+        FROM t_partner_salesarea
+        WHERE foaid = #{oid} AND fkeyarea = #{keyarea}
+        GROUP BY fprovincecode
+    </select>
+    <!--市区下拉框,反查用，根据省份code获取市区-->
+    <select id="findOptionByProvince" resultMap="partnersAreaMap">
+        SELECT fpid,foaid,fcitycode,fcityname,fkeyarea
+        FROM t_partner_salesarea
+        WHERE fpid = #{pid} AND fprovincecode = #{provincecode} AND fkeyarea = #{keyarea}
+        GROUP BY fcitycode
+    </select>
+    <!--产品管理用，end====================================================-->
+    <!--===========================================-->
+    <!--产品管理用,根据省份拿城市，再从城市拿合作方信息-->
+    <!--查询合作方地址表里面的下拉省份，返回给省份name和code-->
+    <select id="findAllProvince" resultMap="partnersAreaMap">
+        SELECT fprovincecode,fprovincename
+        FROM t_partner_salesarea
+        GROUP BY fprovincecode
+    </select>
+    <!--查询合作方地址表中省份下的城市,返回市区code和name-->
+    <select id="findCityByProvince" resultMap="partnersAreaMap">
+        SELECT fcitycode,fcityname,fpid,fkeyarea
+        FROM t_partner_salesarea
+        WHERE fprovincecode = #{provinceCode}
+        GROUP BY fcitycode
+    </select>
+    <!--产品管理用，end====================================================-->
+</mapper>
